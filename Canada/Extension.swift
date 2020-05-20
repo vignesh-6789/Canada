@@ -1,9 +1,9 @@
 //
 //  Extension.swift
-//  Sample_TableView
+//  Canada
 //
-//  Created by Esat Kemal Ekren on 5.04.2018.
-//  Copyright © 2018 Esat Kemal Ekren. All rights reserved.
+//  Created by Vignesh on 15/05/20.
+//  Copyright © 2020 Vignesh. All rights reserved.
 //
 
 import UIKit
@@ -43,8 +43,5 @@ extension UIView {
         if width != 0 {
             widthAnchor.constraint(equalToConstant: width).isActive = true
         }
-        
     }
-    
 }
-

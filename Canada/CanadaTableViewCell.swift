@@ -1,5 +1,5 @@
 //
-//  ProductCell.swift
+//  CanadaTableViewCell.swift
 //  Canada
 //
 //  Created by Vignesh on 15/05/20.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-class ProductCell : UITableViewCell {
+class CanadaTableViewCell : UITableViewCell {
     
-    var product : Product? {
+    var canadaItem : CanadaItem? {
         didSet {
-            productNameLabel.text = product?.productName
-            productDescriptionLabel.text = product?.productDesc
+            productNameLabel.text = canadaItem?.factName
+            productDescriptionLabel.text = canadaItem?.factDesc
         }
     }
     
@@ -76,7 +76,6 @@ class ProductCell : UITableViewCell {
         productDescriptionLabel.anchor(top: productNameLabel.bottomAnchor, left: productImage.rightAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 5, paddingRight: 10, width: 0, height: 0, enableInsets: false)
         productDescriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 25).isActive = true
         productImageIndicator.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 0, paddingRight: 0, width: 45, height: 45, enableInsets: false)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

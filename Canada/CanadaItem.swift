@@ -9,9 +9,9 @@
 import UIKit
 
 struct CanadaItem {
-
-    var productName : String
-    var productImage : String
-    var productDesc : String
+    
+    var factName: String
+    var factImage: String
+    var factDesc: String
     
 }
