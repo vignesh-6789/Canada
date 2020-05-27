@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F11618A247E24F400A61CB1 /* ServiceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F116189247E24F400A61CB1 /* ServiceCall.swift */; };
+		2F11618C247E453B00A61CB1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F11618B247E453B00A61CB1 /* Constants.swift */; };
 		2FD151E6246E9E340000F7EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD151E5246E9E340000F7EC /* AppDelegate.swift */; };
 		2FD151E8246E9E340000F7EC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD151E7246E9E340000F7EC /* SceneDelegate.swift */; };
 		2FD151EA246E9E340000F7EC /* CanadaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD151E9246E9E340000F7EC /* CanadaViewController.swift */; };
@@ -34,6 +35,7 @@
 		011BD14D918C4A5093F8096B /* Pods_CanadaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CanadaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ACCFC5717CEA66D15F6BADA /* Pods_Canada.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Canada.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F116189247E24F400A61CB1 /* ServiceCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceCall.swift; sourceTree = "<group>"; };
+		2F11618B247E453B00A61CB1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2FD151E2246E9E340000F7EC /* Canada.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Canada.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD151E5246E9E340000F7EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FD151E7246E9E340000F7EC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				2F116189247E24F400A61CB1 /* ServiceCall.swift */,
 				2FD1520D246F9D720000F7EC /* CanadaItem.swift */,
 				2FD1520F246F9D7B0000F7EC /* Extension.swift */,
+				2F11618B247E453B00A61CB1 /* Constants.swift */,
 				2FD151EE246E9E370000F7EC /* Assets.xcassets */,
 				2FD151F3246E9E370000F7EC /* Info.plist */,
 			);
@@ -329,6 +332,7 @@
 				2FD1520C246F9D680000F7EC /* CanadaTableViewCell.swift in Sources */,
 				2FD151E8246E9E340000F7EC /* SceneDelegate.swift in Sources */,
 				2FD1520E246F9D720000F7EC /* CanadaItem.swift in Sources */,
+				2F11618C247E453B00A61CB1 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

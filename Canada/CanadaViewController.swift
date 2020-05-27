@@ -11,7 +11,6 @@ import SystemConfiguration
 import MBProgressHUD
 
 var myTableView: UITableView!
-let cellId = "canadaTableViewCellId"
 var activityView = MBProgressHUD()
 var navigationItem = UINavigationItem()
 let imageCache = NSCache<AnyObject, UIImage>()
@@ -48,8 +47,8 @@ public class Reachability {
 class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CanadaTableViewCell
-        cell.setProductImage(image: UIImage(named:"FileMissing.png")!)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.kCellId, for: indexPath) as! CanadaTableViewCell
+        cell.setProductImage(image: UIImage(named:Constants.kDefaultImageName)!)
         cell.stopAnimating()
         let currentLastItem = serviceCallRequest.canadaFacts[indexPath.row]
         cell.canadaItem = currentLastItem
@@ -68,12 +67,12 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             cell.stopAnimating()
                         })
                     } else {
-                        cell.setProductImage(image: UIImage(named:"FileMissing.png")!)
+                        cell.setProductImage(image: UIImage(named:Constants.kDefaultImageName)!)
                         cell.stopAnimating()
                     }
                 }).resume()
             } else {
-                cell.setProductImage(image: UIImage(named:"FileMissing.png")!)
+                cell.setProductImage(image: UIImage(named:Constants.kDefaultImageName)!)
                 cell.stopAnimating()
             }
         }
@@ -158,7 +157,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         myTableView.estimatedRowHeight = 100
         self.view.addSubview(myTableView)
         
-        myTableView.register(CanadaTableViewCell.self, forCellReuseIdentifier: cellId)
+        myTableView.register(CanadaTableViewCell.self, forCellReuseIdentifier: Constants.kCellId)
         myTableView.translatesAutoresizingMaskIntoConstraints = false
         myTableView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         myTableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
