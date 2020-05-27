@@ -8,11 +8,12 @@
 
 import UIKit
 import SystemConfiguration
+import MBProgressHUD
 
 var myTableView: UITableView!
 let cellId = "canadaTableViewCellId"
 var canadaFacts : [CanadaItem]  = [CanadaItem]()
-var activityView = UIActivityIndicatorView()
+var activityView = MBProgressHUD()
 var navigationItem = UINavigationItem()
 let imageCache = NSCache<AnyObject, UIImage>()
 
@@ -95,18 +96,25 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return true
     }
     
-    func loadingIndicator() {
-        activityView = UIActivityIndicatorView(style: .large)
-        activityView.center = self.view.center
-        activityView.startAnimating()
+    func showIndicator() {
+        activityView = MBProgressHUD.showAdded(to: self.view, animated: true)
+        activityView.label.text = "Indicator"
+        activityView.detailsLabel.text = "fetching details"
+        activityView.show(animated: true)
         
         self.view.addSubview(activityView)
         self.view.bringSubviewToFront(activityView)
+        self.view.isUserInteractionEnabled = false
+    }
+    
+    func hideIndicator() {
+        MBProgressHUD.hide(for: self.view, animated: true)
+        self.view.isUserInteractionEnabled = true
     }
     
     @objc func refreshClicked(_ sender: UIBarButtonItem) {
         if Reachability.isConnectedToNetwork(){
-            self.loadingIndicator()
+            self.showIndicator()
             self.requestForData()
         } else {
             let alertController = UIAlertController(title: "", message: "Internet Connection not Available! Try After sometime", preferredStyle: .alert)
@@ -147,7 +155,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         myTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
         if Reachability.isConnectedToNetwork() {
-            self.loadingIndicator()
+            self.showIndicator()
             self.requestForData()
         } else {
             let alertController = UIAlertController(title: "", message: "Internet Connection not Available! Try After sometime", preferredStyle: .alert)
@@ -199,12 +207,17 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         
                         DispatchQueue.main.async {
                             myTableView.reloadData()
+                            self.hideIndicator()
                         }
                     }
-                } catch {/* error handling here */}
+                } catch {/* error handling here */
+                    DispatchQueue.main.async {
+                        self.hideIndicator()
+                    }
+                }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                activityView.stopAnimating()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.hideIndicator()
             }
         }.resume()
     }
