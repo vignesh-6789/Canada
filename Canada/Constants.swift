@@ -7,7 +7,11 @@
 //
 
 class Constants {
-    static let kRequestUrl = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
-    static let kCellId = "canadaTableViewCellId"
-    static let kDefaultImageName = "FileMissing.png"
+    static let RequestUrl = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
+    static let CellId = "canadaTableViewCellId"
+    static let DefaultImageName = "FileMissing.png"
+    static let NoInternetAlert = "Internet Connection not Available! Try After sometime"
+    static let IndicatorLableText = "Indicator"
+    static let IndicatorDetailText =  "fetching details"
+
 }

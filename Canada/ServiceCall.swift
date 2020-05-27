@@ -15,7 +15,7 @@ class ServiceCall: NSObject {
     
     func fetchContents (completion: @escaping(_ contents: [CanadaItem], _ title: NSString, _ error: NSError?) -> Void) {
         
-        let gitUrl = URL(string: Constants.kRequestUrl)
+        let gitUrl = URL(string: Constants.RequestUrl)
         var request = URLRequest(url: gitUrl!)
         
         request.httpMethod = "GET"
