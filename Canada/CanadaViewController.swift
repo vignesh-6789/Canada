@@ -12,10 +12,10 @@ import MBProgressHUD
 
 var myTableView: UITableView!
 let cellId = "canadaTableViewCellId"
-var canadaFacts : [CanadaItem]  = [CanadaItem]()
 var activityView = MBProgressHUD()
 var navigationItem = UINavigationItem()
 let imageCache = NSCache<AnyObject, UIImage>()
+var serviceCallRequest = ServiceCall()
 
 public class Reachability {
     
@@ -51,7 +51,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CanadaTableViewCell
         cell.setProductImage(image: UIImage(named:"FileMissing.png")!)
         cell.stopAnimating()
-        let currentLastItem = canadaFacts[indexPath.row]
+        let currentLastItem = serviceCallRequest.canadaFacts[indexPath.row]
         cell.canadaItem = currentLastItem
         if let cacheImage = imageCache.object(forKey: currentLastItem.factName as AnyObject) {
             cell.setProductImage(image: cacheImage)
@@ -85,7 +85,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return canadaFacts.count
+        return serviceCallRequest.canadaFacts.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -93,7 +93,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     override var prefersStatusBarHidden: Bool {
-        return true
+        return false
     }
     
     func showIndicator() {
@@ -126,9 +126,20 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        let navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height:55))
+        let statusBarHeight: CGFloat = {
+            var heightToReturn: CGFloat = 0.0
+            for window in UIApplication.shared.windows {
+                if let height = window.windowScene?.statusBarManager?.statusBarFrame.height, height > heightToReturn {
+                    heightToReturn = height
+                }
+            }
+            return heightToReturn
+        }()
+        
+        let navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height:44))
         navigationBar.backgroundColor = UIColor.white
         let rightButton = UIBarButtonItem(title: "Refresh", style: .plain, target: self, action: #selector(CanadaViewController.refreshClicked(_:)))
+        
         let attributes = [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 20)!]
         UINavigationBar.appearance().titleTextAttributes = attributes
         
@@ -136,7 +147,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationBar.items = [navigationItem]
         self.view.addSubview(navigationBar)
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        navigationBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        navigationBar.topAnchor.constraint(equalTo: view.topAnchor, constant: statusBarHeight).isActive = true
         navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
@@ -149,7 +160,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         myTableView.register(CanadaTableViewCell.self, forCellReuseIdentifier: cellId)
         myTableView.translatesAutoresizingMaskIntoConstraints = false
-        myTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 55).isActive = true
+        myTableView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         myTableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         myTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -165,72 +176,13 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func requestForData () {
-        let gitUrl = URL(string: "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json")
-        var request = URLRequest(url: gitUrl!)
-        
-        request.httpMethod = "GET"
-        request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { (data, response
-            , error) in
-            
-            let backToString = String(data: data!, encoding: .ascii) as String?
-            
-            if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                
-                let fileURL = dir.appendingPathComponent("file.json")
-                do {
-                    try backToString!.write(to: fileURL, atomically: false, encoding: .utf8)
-                } catch {}
-                do {
-                    let text2 = try String(contentsOf: fileURL, encoding: .utf8)
-                    let dict = self.convertToDictionary(text: text2)
-                    if let person = dict {
-                        
-                        if let json = person as [String: Any]?, let results = json["rows"] as? [[String:Any]]  {
-                            
-                            DispatchQueue.main.async {
-                                self.navigationItem.title = json["title"] as? String
-                            }
-                            if canadaFacts.count > 1 {
-                                canadaFacts.removeAll()
-                            }
-                            for result in results {
-                                if let title = result["title"],let title2 = result["description"],let title3 = result["imageHref"]
-                                {
-                                    if let tit = title as? String, tit.count >= 1 {
-                                        canadaFacts.append(CanadaItem(factName: title as? String ?? "", factImage: title3 as? String ?? "" , factDesc: title2 as? String ?? ""))
-                                    }
-                                }
-                            }
-                        }
-                        
-                        DispatchQueue.main.async {
-                            myTableView.reloadData()
-                            self.hideIndicator()
-                        }
-                    }
-                } catch {/* error handling here */
-                    DispatchQueue.main.async {
-                        self.hideIndicator()
-                    }
-                }
-            }
+        serviceCallRequest.fetchContents { (contents, title, error) in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.navigationItem.title = serviceCallRequest.title as String
+                myTableView.reloadData()
                 self.hideIndicator()
             }
-        }.resume()
-    }
-    
-    func convertToDictionary(text: String) -> [String: Any]? {
-        if let data = text.data(using: .utf8) {
-            do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-            } catch {
-                print(error.localizedDescription)
-            }
         }
-        return nil
     }
 }
 
