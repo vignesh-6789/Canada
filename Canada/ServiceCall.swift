@@ -24,47 +24,48 @@ class ServiceCall: NSObject {
         URLSession.shared.dataTask(with: request) { (data, response
             , error) in
             
-            let backToString = String(data: data!, encoding: .ascii) as String?
-            
-            if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                
-                let fileURL = dir.appendingPathComponent("file.json")
-                do {
-                    try backToString!.write(to: fileURL, atomically: false, encoding: .utf8)
-                } catch {}
-                do {
-                    let text2 = try String(contentsOf: fileURL, encoding: .utf8)
-                    let dict = self.convertToDictionary(text: text2)
-                    if let person = dict {
-                        
-                        if let json = person as [String: Any]?, let results = json["rows"] as? [[String:Any]]  {
+            if let backToString = String(data: data!, encoding: .ascii) as String? {
+                if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                    
+                    let fileURL = dir.appendingPathComponent("file.json")
+                    do {
+                        try backToString.write(to: fileURL, atomically: false, encoding: .utf8)
+                    } catch {}
+                    do {
+                        let text2 = try String(contentsOf: fileURL, encoding: .utf8)
+                        let dict = self.convertToDictionary(text: text2)
+                        if let person = dict {
                             
-                            DispatchQueue.main.async {
-                                self.title = json["title"] as! NSString
-                            }
-                            if self.canadaFacts.count > 1 {
-                                self.canadaFacts.removeAll()
-                            }
-                            for result in results {
-                                if let title = result["title"],let title2 = result["description"],let title3 = result["imageHref"]
-                                {
-                                    if let tit = title as? String, tit.count >= 1 {
-                                        self.canadaFacts.append(CanadaItem(factName: title as? String ?? "", factImage: title3 as? String ?? "" , factDesc: title2 as? String ?? ""))
+                            if let json = person as [String: Any]?, let results = json["rows"] as? [[String:Any]]  {
+                                
+                                DispatchQueue.main.async {
+                                    self.title = json["title"] as! NSString
+                                }
+                                if self.canadaFacts.count > 1 {
+                                    self.canadaFacts.removeAll()
+                                }
+                                for result in results {
+                                    if let title = result["title"],let title2 = result["description"],let title3 = result["imageHref"]
+                                    {
+                                        if let tit = title as? String, tit.count >= 1 {
+                                            self.canadaFacts.append(CanadaItem(factName: title as? String ?? "", factImage: title3 as? String ?? "" , factDesc: title2 as? String ?? ""))
+                                        }
                                     }
                                 }
+                                completion(self.canadaFacts, self.title, error as NSError?)
+                            } else {
+                                completion(self.canadaFacts, self.title, nil)
                             }
-                            completion(self.canadaFacts, self.title, error as NSError?)
                         } else {
                             completion(self.canadaFacts, self.title, nil)
                         }
-                    } else {
-                        completion(self.canadaFacts, self.title, nil)
+                    } catch {/* error handling here */
+                        completion(self.canadaFacts, self.title, error as NSError?)
                     }
-                } catch {/* error handling here */
-                    completion(self.canadaFacts, self.title, error as NSError?)
                 }
+            } else {
+                completion(self.canadaFacts, self.title, nil)
             }
-            
         }.resume()
     }
     
@@ -78,5 +79,4 @@ class ServiceCall: NSObject {
         }
         return nil
     }
-    
 }

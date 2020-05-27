@@ -1,16 +1,20 @@
 PODS:
   - MBProgressHUD (1.1.0)
+  - SwiftLint (0.39.2)
 
 DEPENDENCIES:
   - MBProgressHUD (~> 1.1.0)
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
     - MBProgressHUD
+    - SwiftLint
 
 SPEC CHECKSUMS:
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
 
-PODFILE CHECKSUM: c59ba52226d922b8eca648b7bc4f7fc87ff565f9
+PODFILE CHECKSUM: a61101af0db0659553a86bae2392b95d7b39e011
 
 COCOAPODS: 1.9.2
