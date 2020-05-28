@@ -7,6 +7,7 @@
 //
 
 class Constants {
+    
     static let RequestUrl = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
     static let CellId = "canadaTableViewCellId"
     static let DefaultImageName = "FileMissing.png"

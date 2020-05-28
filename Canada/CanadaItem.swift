@@ -10,8 +10,8 @@ import UIKit
 
 struct CanadaItem {
     
-    var factName: String
-    var factImage: String
-    var factDesc: String
+    var factName: String // Name of the fact
+    var factImage: String // Image URL
+    var factDesc: String // Fact description
     
 }

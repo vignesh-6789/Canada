@@ -9,6 +9,7 @@
 import UIKit
 import MBProgressHUD
 
+//Variable Declarations
 var myTableView: UITableView!
 var activityView = MBProgressHUD()
 var navigationItem = UINavigationItem()
@@ -17,6 +18,7 @@ var serviceCallRequest = ServiceCall()
 
 class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    // Status Bar Hide/Show
     override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -24,6 +26,8 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        
+        //Get the status Bar Height
         let statusBarHeight: CGFloat = {
             var heightToReturn: CGFloat = 0.0
             for window in UIApplication.shared.windows {
@@ -49,20 +53,24 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
+        //Create  Main TableView
         myTableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
         myTableView.dataSource = self
         myTableView.delegate = self
         myTableView.rowHeight = UITableView.automaticDimension
         myTableView.estimatedRowHeight = 100
         self.view.addSubview(myTableView)
-        
         myTableView.register(CanadaTableViewCell.self, forCellReuseIdentifier: Constants.CellId)
+        
+        // Progaramatic Constraints for the tableview
         myTableView.translatesAutoresizingMaskIntoConstraints = false
         myTableView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         myTableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         myTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
+        
+        // Check Internet Availablity before making the service call
         if Reachability.isConnectedToNetwork() {
             self.showIndicator()
             self.requestForData()
@@ -73,9 +81,10 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
+    // Method to call the API service call
     func requestForData () {
         serviceCallRequest.fetchContents { (contents, title, error) in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { // reload the table on main thread always
                 self.navigationItem.title = serviceCallRequest.title as String
                 myTableView.reloadData()
                 self.hideIndicator()
@@ -85,12 +94,15 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellId, for: indexPath) as! CanadaTableViewCell
-        cell.setProductImage(image: UIImage(named:Constants.DefaultImageName)!)
+        
+        // Set default image because few image are not avaible in the given URL path
+        cell.setRowImage(image: UIImage(named:Constants.DefaultImageName)!)
         cell.stopAnimating()
         let currentLastItem = serviceCallRequest.canadaFacts[indexPath.row]
         cell.canadaItem = currentLastItem
+        // check for the image if not availble fetch the image using image URL through URLSession
         if let cacheImage = imageCache.object(forKey: currentLastItem.factName as AnyObject) {
-            cell.setProductImage(image: cacheImage)
+            cell.setRowImage(image: cacheImage)
         } else {
             if let url:URL = URL(string: currentLastItem.factImage) {
                 cell.startAnimating()
@@ -98,17 +110,17 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if let data = try? Data(contentsOf: url){
                         DispatchQueue.main.async(execute: { () -> Void in
                             let img:UIImage! = UIImage(data: data)
-                            cell.setProductImage(image: img)
+                            cell.setRowImage(image: img)
                             imageCache.setObject(img, forKey: currentLastItem.factName as AnyObject)
                             cell.stopAnimating()
                         })
                     } else {
-                        cell.setProductImage(image: UIImage(named:Constants.DefaultImageName)!)
+                        cell.setRowImage(image: UIImage(named:Constants.DefaultImageName)!)
                         cell.stopAnimating()
                     }
                 }).resume()
             } else {
-                cell.setProductImage(image: UIImage(named:Constants.DefaultImageName)!)
+                cell.setRowImage(image: UIImage(named:Constants.DefaultImageName)!)
                 cell.stopAnimating()
             }
         }
@@ -127,6 +139,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return UITableView.automaticDimension
     }
     
+    // Show the Indicator for better user experience while fetching data through service call
     func showIndicator() {
         activityView = MBProgressHUD.showAdded(to: self.view, animated: true)
         activityView.label.text = Constants.IndicatorLableText
@@ -138,11 +151,13 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.view.isUserInteractionEnabled = false
     }
     
+    // Hide the Indicator after finishing the service call  
     func hideIndicator() {
         MBProgressHUD.hide(for: self.view, animated: true)
         self.view.isUserInteractionEnabled = true
     }
     
+    // Screen Referesh 
     @objc func refreshClicked(_ sender: UIBarButtonItem) {
         if Reachability.isConnectedToNetwork(){
             self.showIndicator()

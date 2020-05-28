@@ -12,12 +12,13 @@ class CanadaTableViewCell : UITableViewCell {
     
     var canadaItem : CanadaItem? {
         didSet {
-            productNameLabel.text = canadaItem?.factName
-            productDescriptionLabel.text = canadaItem?.factDesc
+            rowNameLabel.text = canadaItem?.factName
+            rowDescriptionLabel.text = canadaItem?.factDesc
         }
     }
     
-    private let productNameLabel : UILabel = {
+    //Fact Name
+    private let rowNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
         lbl.font = UIFont.boldSystemFont(ofSize: 16)
@@ -25,7 +26,8 @@ class CanadaTableViewCell : UITableViewCell {
         return lbl
     }()
     
-    private let productDescriptionLabel : UILabel = {
+    //Fact Description
+    private let rowDescriptionLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
         lbl.font = UIFont.systemFont(ofSize: 16)
@@ -34,48 +36,53 @@ class CanadaTableViewCell : UITableViewCell {
         return lbl
     }()
     
-    private let productImage : UIImageView = {
-        let imgView = UIImageView(image: UIImage(named:"FileMissing.png"))
+    //Fact Image
+    private let rowImage : UIImageView = {
+        let imgView = UIImageView(image: UIImage(named:Constants.DefaultImageName))
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
     }()
     
-    func setProductImage(image:UIImage) {
+    func setRowImage(image:UIImage) {
         DispatchQueue.main.async {
-            self.productImage.image = image
+            self.rowImage.image = image
         }
     }
     
-    private let productImageIndicator : UIActivityIndicatorView = {
+    
+    // Indicator to show the fact image download inprogress 
+    private let rowImageIndicator : UIActivityIndicatorView = {
         let activityView = UIActivityIndicatorView(style: .medium)
         return activityView
     }()
     
     func startAnimating() {
         DispatchQueue.main.async {
-            self.productImageIndicator.startAnimating()
+            self.rowImageIndicator.startAnimating()
         }
     }
     
     func stopAnimating() {
         DispatchQueue.main.async {
-            self.productImageIndicator.stopAnimating()
+            self.rowImageIndicator.stopAnimating()
         }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(productImage)
-        addSubview(productNameLabel)
-        addSubview(productDescriptionLabel)
-        addSubview(productImageIndicator)
         
-        productImage.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 0, paddingRight: 0, width: 45, height: 45, enableInsets: false)
-        productNameLabel.anchor(top: topAnchor, left: productImage.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: 5, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
-        productDescriptionLabel.anchor(top: productNameLabel.bottomAnchor, left: productImage.rightAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 5, paddingRight: 10, width: 0, height: 0, enableInsets: false)
-        productDescriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 25).isActive = true
-        productImageIndicator.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 0, paddingRight: 0, width: 45, height: 45, enableInsets: false)
+        // Add all the UI Component as a cell subview
+        addSubview(rowImage)
+        addSubview(rowNameLabel)
+        addSubview(rowDescriptionLabel)
+        addSubview(rowImageIndicator)
+        
+        rowImage.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 0, paddingRight: 0, width: 45, height: 45, enableInsets: false)
+        rowNameLabel.anchor(top: topAnchor, left: rowImage.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: 5, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        rowDescriptionLabel.anchor(top: rowNameLabel.bottomAnchor, left: rowImage.rightAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 5, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        rowDescriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 25).isActive = true
+        rowImageIndicator.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 0, paddingRight: 0, width: 45, height: 45, enableInsets: false)
     }
     
     required init?(coder aDecoder: NSCoder) {

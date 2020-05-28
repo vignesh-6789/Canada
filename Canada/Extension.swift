@@ -18,28 +18,36 @@ extension UIView {
             let insets = self.safeAreaInsets
             topInset = insets.top
             bottomInset = insets.bottom
-            
-            print("Top: \(topInset)")
-            print("bottom: \(bottomInset)")
         }
         
         translatesAutoresizingMaskIntoConstraints = false
         
+        //Top Anchor
         if let top = top {
             self.topAnchor.constraint(equalTo: top, constant: paddingTop+topInset).isActive = true
         }
+        
+        //Left Anchor
         if let left = left {
             self.leftAnchor.constraint(equalTo: left, constant: paddingLeft).isActive = true
         }
+        
+        //Right Anchor
         if let right = right {
             rightAnchor.constraint(equalTo: right, constant: -paddingRight).isActive = true
         }
+        
+        //Bottom Anchor
         if let bottom = bottom {
             bottomAnchor.constraint(equalTo: bottom, constant: -paddingBottom-bottomInset).isActive = true
         }
+        
+        //Height Anchor
         if height != 0 {
             heightAnchor.constraint(equalToConstant: height).isActive = true
         }
+        
+        //Width Anchor
         if width != 0 {
             widthAnchor.constraint(equalToConstant: width).isActive = true
         }
