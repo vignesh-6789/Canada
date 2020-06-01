@@ -59,6 +59,22 @@ class CanadaTests: XCTestCase {
         wait(for: [expectation], timeout: 10.0)
     }
     
+    func testAllConstantValues() {
+        let requestUrl = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
+          let cellId = "canadaTableViewCellId"
+          let defaultImageName = "FileMissing.png"
+          let noInternetAlert = "Internet Connection not Available! Try After sometime"
+          let indicatorLableText = "Indicator"
+          let indicatorDetailText =  "fetching details"
+        
+        XCTAssertEqual(requestUrl, Constants.RequestUrl)
+        XCTAssertEqual(cellId, Constants.CellId)
+        XCTAssertEqual(defaultImageName, Constants.DefaultImageName)
+        XCTAssertEqual(noInternetAlert, Constants.NoInternetAlert)
+        XCTAssertEqual(indicatorLableText, Constants.IndicatorLableText)
+        XCTAssertEqual(indicatorDetailText, Constants.IndicatorDetailText)
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
