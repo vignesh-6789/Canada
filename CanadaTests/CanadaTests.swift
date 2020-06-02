@@ -25,22 +25,27 @@ class CanadaTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    // check requestForData is present in the class
     func testRequestForDataMethod() {
         XCTAssertNotNil(self.viewControllerUnderTest!.requestForData, "requestForData method not called")
     }
     
+    // check showIndicator is present in the class
     func testShowIndicatorMethod() {
         XCTAssertNotNil(self.viewControllerUnderTest!.showIndicator, "showIndicator method not called")
     }
     
+    // check hideIndicator is present in the class
     func testHideIndicatorMethod() {
         XCTAssertNotNil(self.viewControllerUnderTest!.hideIndicator, "hideIndicator method not called")
     }
     
+    // check the table view delegate's presence in class
     func testThatViewConformsToUITableViewDelegate() {
         XCTAssertTrue(viewControllerUnderTest.conforms(to: UITableViewDelegate.self))
     }
     
+    // check the table view DataSource's presence in class
     func testTableViewConformsToTableViewDataSourceProtocol() {
         XCTAssertTrue(viewControllerUnderTest.conforms(to: UITableViewDataSource.self))
         XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.numberOfSections(in:))))
@@ -48,6 +53,7 @@ class CanadaTests: XCTestCase {
         XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.tableView(_:cellForRowAt:))))
     }
     
+    // check the API Service Call has data or not
     func testAPIServicaCall() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -103,31 +109,33 @@ class CanadaTests: XCTestCase {
         XCTAssertEqual(Reachability.isConnectedToNetwork(), true)
     }
     
-    
+    // Verify the struct set/return correct values - All
     func testAllPropertiesMatchIsTrue() {
         let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
         let two = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
         XCTAssertEqual(one, two)
     }
     
+    // Verify the struct set/return correct values - except factName
     func testFactNameIsDifferent() {
         let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
         let two = CanadaItem(factName: "Flag", factImage: "imageURL", factDesc: "description")
         XCTAssertNotEqual(one, two)
     }
     
+    // Verify the struct set/return correct values - except factImage
     func testImageURLIsDifferent() {
         let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
         let two = CanadaItem(factName: "Beavers", factImage: "imageURL2", factDesc: "description")
         XCTAssertNotEqual(one, two)
     }
     
+    // Verify the struct set/return correct values - except factDesc
     func testDescriptionIsDifferent() {
         let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
         let two = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description2")
         XCTAssertNotEqual(one, two)
     }
-    
     
     func testPerformanceExample() {
         // This is an example of a performance test case.

@@ -58,7 +58,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        //Create  Main TableView
+        //Create  Main TableView for the UI
         myTableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
         myTableView.dataSource = self
         myTableView.delegate = self
