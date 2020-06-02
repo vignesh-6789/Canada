@@ -104,6 +104,7 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.stopAnimating()
         let currentLastItem = serviceCallRequest.canadaFacts[indexPath.row]
         cell.canadaItem = currentLastItem
+        
         // check for the image if not availble fetch the image using image URL through URLSession
         if let cacheImage = imageCache.object(forKey: currentLastItem.factName as AnyObject) {
             cell.setRowImage(image: cacheImage)
@@ -114,16 +115,19 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if let data = try? Data(contentsOf: url){
                         DispatchQueue.main.async(execute: { () -> Void in
                             let img:UIImage! = UIImage(data: data)
+                            // Set the downloaded image
                             cell.setRowImage(image: img)
                             imageCache.setObject(img, forKey: currentLastItem.factName as AnyObject)
                             cell.stopAnimating()
                         })
                     } else {
+                        // Set default image until get the real image
                         cell.setRowImage(image: UIImage(named:Constants.DefaultImageName)!)
                         cell.stopAnimating()
                     }
                 }).resume()
             } else {
+                // Set default image until get the real image
                 cell.setRowImage(image: UIImage(named:Constants.DefaultImageName)!)
                 cell.stopAnimating()
             }
