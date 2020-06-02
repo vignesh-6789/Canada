@@ -50,11 +50,17 @@ class CanadaTableViewCell : UITableViewCell {
         }
     }
     
-    
     // Indicator to show the fact image download inprogress 
     private let rowImageIndicator : UIActivityIndicatorView = {
-        let activityView = UIActivityIndicatorView(style: .medium)
-        return activityView
+        if #available(iOS 13.0, *) {
+            let activityView = UIActivityIndicatorView(style: .medium)
+            return activityView
+        } else {
+            // Fallback on earlier versions
+            let activityView = UIActivityIndicatorView(style: .whiteLarge)
+            return activityView
+
+        }
     }()
     
     func startAnimating() {

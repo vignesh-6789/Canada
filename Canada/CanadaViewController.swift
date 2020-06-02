@@ -31,8 +31,13 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let statusBarHeight: CGFloat = {
             var heightToReturn: CGFloat = 0.0
             for window in UIApplication.shared.windows {
-                if let height = window.windowScene?.statusBarManager?.statusBarFrame.height, height > heightToReturn {
-                    heightToReturn = height
+                if #available(iOS 13.0, *) {
+                    if let height = window.windowScene?.statusBarManager?.statusBarFrame.height, height > heightToReturn {
+                        heightToReturn = height
+                    }
+                } else {
+                    // Fallback on earlier versions
+                    heightToReturn = 44.0
                 }
             }
             return heightToReturn
@@ -68,7 +73,6 @@ class CanadaViewController: UIViewController, UITableViewDelegate, UITableViewDa
         myTableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         myTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        
         
         // Check Internet Availablity before making the service call
         if Reachability.isConnectedToNetwork() {
