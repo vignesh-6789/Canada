@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct CanadaItem {
+struct CanadaItem: Equatable {
     
     var factName: String // Name of the fact
     var factImage: String // Image URL

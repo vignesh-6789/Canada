@@ -12,7 +12,6 @@ import XCTest
 class CanadaTests: XCTestCase {
     
     var viewControllerUnderTest: CanadaViewController!
-    var tableCellUnderTest: CanadaTableViewCell!
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -20,7 +19,6 @@ class CanadaTests: XCTestCase {
         self.viewControllerUnderTest = CanadaViewController()
         self.viewControllerUnderTest.loadView()
         self.viewControllerUnderTest.viewDidLoad()
-        
     }
     
     override func tearDown() {
@@ -50,7 +48,7 @@ class CanadaTests: XCTestCase {
         XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.tableView(_:cellForRowAt:))))
     }
     
-    func testExample() {
+    func testAPIServicaCall() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
@@ -78,6 +76,7 @@ class CanadaTests: XCTestCase {
         wait(for: [expectation], timeout: 10.0)
     }
     
+    // Verify all the cosnstant values
     func testAllConstantValues() {
         let requestUrl = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
         let cellId = "canadaTableViewCellId"
@@ -94,9 +93,41 @@ class CanadaTests: XCTestCase {
         XCTAssertEqual(indicatorDetailText, Constants.IndicatorDetailText)
     }
     
+    // We are forcefully hiding the status bar
     func testStatusBarHeight() {
         XCTAssertEqual(viewControllerUnderTest.prefersStatusBarHidden, false)
     }
+    
+    // Turn off the internet connection to test this case
+    func testInternetAvailability() {
+        XCTAssertEqual(Reachability.isConnectedToNetwork(), true)
+    }
+    
+    
+    func testAllPropertiesMatchIsTrue() {
+        let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
+        let two = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
+        XCTAssertEqual(one, two)
+    }
+    
+    func testFactNameIsDifferent() {
+        let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
+        let two = CanadaItem(factName: "Flag", factImage: "imageURL", factDesc: "description")
+        XCTAssertNotEqual(one, two)
+    }
+    
+    func testImageURLIsDifferent() {
+        let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
+        let two = CanadaItem(factName: "Beavers", factImage: "imageURL2", factDesc: "description")
+        XCTAssertNotEqual(one, two)
+    }
+    
+    func testDescriptionIsDifferent() {
+        let one = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description")
+        let two = CanadaItem(factName: "Beavers", factImage: "imageURL", factDesc: "description2")
+        XCTAssertNotEqual(one, two)
+    }
+    
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
