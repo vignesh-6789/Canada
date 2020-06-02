@@ -11,24 +11,43 @@ import XCTest
 
 class CanadaTests: XCTestCase {
     
+    var viewControllerUnderTest: CanadaViewController!
+    var tableCellUnderTest: CanadaTableViewCell!
+    
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        self.viewControllerUnderTest = CanadaViewController()
+        self.viewControllerUnderTest.loadView()
+        self.viewControllerUnderTest.viewDidLoad()
+        
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        
     }
     
-    func convertToDictionary(text: String) -> [String: Any]? {
-        if let data = text.data(using: .utf8) {
-            do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-        return nil
+    func testRequestForDataMethod() {
+        XCTAssertNotNil(self.viewControllerUnderTest!.requestForData, "requestForData method not called")
+    }
+    
+    func testShowIndicatorMethod() {
+        XCTAssertNotNil(self.viewControllerUnderTest!.showIndicator, "showIndicator method not called")
+    }
+    
+    func testHideIndicatorMethod() {
+        XCTAssertNotNil(self.viewControllerUnderTest!.hideIndicator, "hideIndicator method not called")
+    }
+    
+    func testThatViewConformsToUITableViewDelegate() {
+        XCTAssertTrue(viewControllerUnderTest.conforms(to: UITableViewDelegate.self))
+    }
+    
+    func testTableViewConformsToTableViewDataSourceProtocol() {
+        XCTAssertTrue(viewControllerUnderTest.conforms(to: UITableViewDataSource.self))
+        XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.numberOfSections(in:))))
+        XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.tableView(_:numberOfRowsInSection:))))
+        XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.tableView(_:cellForRowAt:))))
     }
     
     func testExample() {
@@ -61,11 +80,11 @@ class CanadaTests: XCTestCase {
     
     func testAllConstantValues() {
         let requestUrl = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
-          let cellId = "canadaTableViewCellId"
-          let defaultImageName = "FileMissing.png"
-          let noInternetAlert = "Internet Connection not Available! Try After sometime"
-          let indicatorLableText = "Indicator"
-          let indicatorDetailText =  "fetching details"
+        let cellId = "canadaTableViewCellId"
+        let defaultImageName = "FileMissing.png"
+        let noInternetAlert = "Internet Connection not Available! Try After sometime"
+        let indicatorLableText = "Indicator"
+        let indicatorDetailText =  "fetching details"
         
         XCTAssertEqual(requestUrl, Constants.RequestUrl)
         XCTAssertEqual(cellId, Constants.CellId)
@@ -73,6 +92,10 @@ class CanadaTests: XCTestCase {
         XCTAssertEqual(noInternetAlert, Constants.NoInternetAlert)
         XCTAssertEqual(indicatorLableText, Constants.IndicatorLableText)
         XCTAssertEqual(indicatorDetailText, Constants.IndicatorDetailText)
+    }
+    
+    func testStatusBarHeight() {
+        XCTAssertEqual(viewControllerUnderTest.prefersStatusBarHidden, false)
     }
     
     func testPerformanceExample() {
